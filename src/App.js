@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
   render() {
-    var helloWorld = 'Welcome to the Road to learn React';
-    var user = {
+    const helloWorld = 'Welcome to the Road to learn React';
+    const user = {
       firstName: 'Sam',
       lastName: 'Scheffler'
     }
