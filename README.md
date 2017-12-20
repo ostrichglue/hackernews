@@ -1,3 +1,9 @@
+Repository following along with "The Road to Learn React", by Robin Wieruch.
+
+The original "create-react-app" readme is included below for my own reference.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
