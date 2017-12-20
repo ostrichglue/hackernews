@@ -67,13 +67,13 @@ class App extends Component {
             Search
           </Search>
 
-          {result ? (
+          {result && (
             <Table
               list={result.hits}
               pattern={searchTerm}
               onDismiss={this.onDismiss}
             />
-          ) : null}
+          )}
         </div>
       </div>
     );
