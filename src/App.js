@@ -20,7 +20,8 @@ class App extends Component {
       results: null,
       searchKey: '',
       searchTerm: DEFAULT_QUERY,
-      error: null
+      error: null,
+      isLoading: false
     };
 
     this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
@@ -44,11 +45,14 @@ class App extends Component {
     const updatedHits = [...oldHits, ...hits];
 
     this.setState({
-      results: { ...results, [searchKey]: { hits: updatedHits, page } }
+      results: { ...results, [searchKey]: { hits: updatedHits, page } },
+      isLoading: false
     });
   }
 
   fetchSearchTopStories(searchTerm, page = 0) {
+    this.setState({ isLoading: true });
+
     fetch(
       `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
     )
@@ -95,7 +99,7 @@ class App extends Component {
   }
 
   render() {
-    const { searchTerm, results, searchKey, error } = this.state;
+    const { searchTerm, results, searchKey, error, isLoading } = this.state;
     const page =
       (results && results[searchKey] && results[searchKey].page) || 0;
     const list =
@@ -121,11 +125,15 @@ class App extends Component {
           )}
 
           <div className="interactions">
-            <Button
-              onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
-            >
-              More
-            </Button>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <Button
+                onClick={() => this.fetchSearchTopStories(searchKey, page + 1)}
+              >
+                More
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -133,13 +141,30 @@ class App extends Component {
   }
 }
 
-const Search = ({ value, onChange, onSubmit, children }) => (
-  <form onSubmit={onSubmit}>
-    {children}
-    <input type="text" value={value} onChange={onChange} />
-    <button type="submit">{children}</button>
-  </form>
-);
+const Loading = () => <div>Loading ...</div>;
+
+class Search extends Component {
+  render() {
+    const { value, onChange, onSubmit, children } = this.props;
+
+    return (
+      <form onSubmit={onSubmit}>
+        {children}
+        <input
+          type="text"
+          value={value}
+          onChange={onChange}
+          ref={node => (this.input = node)}
+        />
+        <button type="submit">{children}</button>
+      </form>
+    );
+  }
+
+  componentDidMount() {
+    this.input.focus();
+  }
+}
 
 Search.propTypes = {
   value: PropTypes.string.isRequired,
